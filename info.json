@@ -3,12 +3,12 @@
   "slug": "woo-support-system",
   "version": "3.0.5",
   "author": "Dhanush R S",
-  "download_url": "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v3.0.5/woo-support-system.zip",
+  "download_url": "https://raw.githubusercontent.com/dhanushrs1/woo-support-system/refs/heads/main/info.json",
   "requires": "5.0",
   "tested": "6.5",
   "requires_php": "7.4",
   "last_updated": "2025-06-27 15:00:00",
-  "homepage": "https://github.com/YOUR_USERNAME/YOUR_REPO/",
+  "homepage": "https://github.com/dhanushrs1/woo-support-system",
   "sections": {
     "description": "The best support ticket system for WooCommerce, fully integrated into the My Account page.",
     "changelog": "<h4>Version 3.0.5</h4><ul><li>Initial public release.</li></ul>"
