@@ -1,17 +1,17 @@
 {
   "name": "WooCommerce Support System",
   "slug": "woo-support-system",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "author": "Dhanush R S",
-  "download_url": "https://raw.githubusercontent.com/dhanushrs1/woo-support-system/refs/heads/main/info.json",
+  "download_url": "https://github.com/dhanushrs1/woo-support-system/releases/download/v3.0.6/woo-support-system.zip",
   "requires": "5.0",
   "tested": "6.5",
   "requires_php": "7.4",
-  "last_updated": "2025-06-27 15:00:00",
-  "homepage": "https://github.com/dhanushrs1/woo-support-system",
+  "last_updated": "2025-06-27 20:30:00",
+  "homepage": "https://github.com/dhanushrs1/woo-support-system/",
   "sections": {
     "description": "The best support ticket system for WooCommerce, fully integrated into the My Account page.",
-    "changelog": "<h4>Version 3.0.5</h4><ul><li>Initial public release.</li></ul>"
+    "changelog": "<h4>Version 3.0.6</h4><ul><li>FIX: Corrected an issue that caused some emails to go to the spam folder.</li><li>FIX: Resolved a PHP warning on the ticket creation page.</li><li>ENHANCEMENT: Added client-side validation and a loading spinner for file uploads.</li></ul>"
   },
   "banners": {
     "low": "",
