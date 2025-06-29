@@ -64,6 +64,8 @@ You have two options under **Settings > General > Attachment Storage Method**:
 
 ## 📜 Changelog 📜
 
+<h4>Version 3.0.7</h4><ul><li>FIX: Corrected a form wrapping and overflow error on the ticket view page.</li><li>ENHANCEMENT: Improved the user interface and design of the chat system for better readability.</li><li>ENHANCEMENT: Added the official plugin banner and icon for a more professional appearance in the repository.</li></ul><h4>Version 3.0.6</h4><ul><li>FIX: Corrected an issue that caused some emails to go to the spam folder.</li><li>FIX: Resolved a PHP warning on the ticket creation page.</li><li>ENHANCEMENT: Added client-side validation and a loading spinner for file uploads.</li></ul>
+
 #### `3.0.6`
 * **ENHANCEMENT:** Added client-side validation for file attachments. The form now provides instant feedback if a file is too large or an unsupported type.
 * **ENHANCEMENT:** Added a loading spinner to the submit button when files are being uploaded to provide better user feedback.
