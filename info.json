@@ -7,14 +7,14 @@
   "requires": "5.0",
   "tested": "6.5",
   "requires_php": "7.4",
-  "last_updated": "2025-06-29 19:45:00",
+  "last_updated": "2025-06-29 22:13:00",
   "homepage": "https://github.com/dhanushrs1/woo-support-system/",
   "sections": {
     "description": "The best support ticket system for WooCommerce, fully integrated into the My Account page.",
     "changelog": "<h4>Version 3.0.7</h4><ul><li>FIX: Corrected a form wrapping and overflow error on the ticket view page.</li><li>ENHANCEMENT: Improved the user interface and design of the chat system for better readability.</li><li>ENHANCEMENT: Added the official plugin banner and icon for a more professional appearance in the repository.</li></ul><h4>Version 3.0.6</h4><ul><li>FIX: Corrected an issue that caused some emails to go to the spam folder.</li><li>FIX: Resolved a PHP warning on the ticket creation page.</li><li>ENHANCEMENT: Added client-side validation and a loading spinner for file uploads.</li></ul>"
   },
   "banners": {
-    "low": "https://ps.w.org/woo-support-system/assets/banner-772x250.png",
+    "low": "https://raw.githubusercontent.com/dhanushrs1/woo-support-system/main/assets/banner-772x250.png",
     "high": ""
   }
 }
