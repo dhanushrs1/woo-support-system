@@ -1,7 +1,7 @@
 {
   "name": "WooCommerce Support System",
   "slug": "woo-support-system",
-  "version": "3.0.7",
+  "version": "3.0.7.1",
   "author": "Dhanush R S",
   "download_url": "https://github.com/dhanushrs1/woo-support-system/releases/download/v3.0.7/woo-support-system.zip",
   "requires": "5.0",
