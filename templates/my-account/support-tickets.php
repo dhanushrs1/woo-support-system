@@ -1,15 +1,8 @@
 <?php
-/**
- * My Account > Support Tickets template
- *
- * This template is responsible for displaying the ticket creation form and the user's ticket history.
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Get current user information and settings
 $current_user = wp_get_current_user();
 $current_user_id = $current_user->ID;
 $billing_phone = get_user_meta($current_user_id, 'billing_phone', true);
@@ -19,7 +12,6 @@ $max_files = absint($settings['max_files_per_upload'] ?? 3);
 $max_size_mb = absint($settings['max_file_size'] ?? 5);
 $allowed_types = esc_attr($settings['allowed_file_types'] ?? 'jpg,jpeg,png,pdf');
 
-// --- ROBUST PAGINATION LOGIC ---
 $tickets_per_page = isset($settings['tickets_per_page']) ? absint($settings['tickets_per_page']) : 10;
 if ($tickets_per_page <= 0) { $tickets_per_page = 10; }
 
@@ -28,10 +20,8 @@ $tickets_table = $wpdb->prefix . 'support_tickets';
 $current_page = isset( $_GET['ticket_page'] ) ? absint( $_GET['ticket_page'] ) : 1;
 $offset = ( $current_page - 1 ) * $tickets_per_page;
 
-// Get total number of tickets for pagination
 $total_tickets = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM {$tickets_table} WHERE user_id = %d", $current_user_id ) );
 
-// Get paginated tickets for the current user
 $tickets = $wpdb->get_results( $wpdb->prepare(
     "SELECT * FROM {$tickets_table} WHERE user_id = %d ORDER BY last_updated DESC LIMIT %d OFFSET %d",
     $current_user_id, $tickets_per_page, $offset
@@ -58,36 +48,38 @@ $tickets = $wpdb->get_results( $wpdb->prepare(
         <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="wss_subject" id="wss_subject" required>
     </p>
 
-    <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
-        <label for="wss_order_id"><?php _e('Related Order (Optional)', 'woo-support-system'); ?></label>
-        <select name="wss_order_id" id="wss_order_id" class="woocommerce-select">
-            <option value=""><?php _e('None', 'woo-support-system'); ?></option>
-            <?php
-                $customer_orders = wc_get_orders( [ 'customer' => $current_user_id, 'limit' => 20, 'orderby' => 'date', 'order' => 'DESC' ] );
-                if ($customer_orders) {
-                    foreach ( $customer_orders as $order ) {
-                        echo '<option value="' . esc_attr( $order->get_id() ) . '">#' . esc_html( $order->get_order_number() ) . ' - ' . esc_html( $order->get_date_created()->date('F j, Y') ) . '</option>';
+    <div class="wss-flex-row">
+        <p class="woocommerce-form-row form-row form-row-half">
+            <label for="wss_order_id"><?php _e('Related Order (Optional)', 'woo-support-system'); ?></label>
+            <select name="wss_order_id" id="wss_order_id" class="woocommerce-select">
+                <option value=""><?php _e('None', 'woo-support-system'); ?></option>
+                <?php
+                    $customer_orders = wc_get_orders( [ 'customer' => $current_user_id, 'limit' => 20, 'orderby' => 'date', 'order' => 'DESC' ] );
+                    if ($customer_orders) {
+                        foreach ( $customer_orders as $order ) {
+                            echo '<option value="' . esc_attr( $order->get_id() ) . '">#' . esc_html( $order->get_order_number() ) . ' - ' . esc_html( $order->get_date_created()->date('F j, Y') ) . '</option>';
+                        }
                     }
-                }
-            ?>
-        </select>
-    </p>
+                ?>
+            </select>
+        </p>
 
-    <p class="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
-        <label for="wss_priority"><?php _e('Priority', 'woo-support-system'); ?> <span class="required">*</span></label>
-        <select name="wss_priority" id="wss_priority" class="woocommerce-select" required>
-            <option value="Normal"><?php _e('Normal', 'woo-support-system'); ?></option>
-            <option value="Low"><?php _e('Low', 'woo-support-system'); ?></option>
-            <option value="High"><?php _e('High', 'woo-support-system'); ?></option>
-            <option value="Urgent"><?php _e('Urgent', 'woo-support-system'); ?></option>
-        </select>
-    </p>
-    
+        <p class="woocommerce-form-row form-row form-row-half">
+            <label for="wss_priority"><?php _e('Priority', 'woo-support-system'); ?> <span class="required">*</span></label>
+            <select name="wss_priority" id="wss_priority" class="woocommerce-select" required>
+                <option value="Normal"><?php _e('Normal', 'woo-support-system'); ?></option>
+                <option value="Low"><?php _e('Low', 'woo-support-system'); ?></option>
+                <option value="High"><?php _e('High', 'woo-support-system'); ?></option>
+                <option value="Urgent"><?php _e('Urgent', 'woo-support-system'); ?></option>
+            </select>
+        </p>
+    </div>
+
     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
         <label for="wss_message"><?php _e('Message', 'woo-support-system'); ?> <span class="required">*</span></label>
         <textarea class="woocommerce-Textarea woocommerce-Input--textarea input-text" name="wss_message" id="wss_message" rows="6" required></textarea>
     </p>
-    
+
     <?php if ($allow_attachments): ?>
     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
         <label for="wss_attachments"><?php _e('Add Attachments', 'woo-support-system'); ?></label>
@@ -117,24 +109,22 @@ $tickets = $wpdb->get_results( $wpdb->prepare(
     <table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
         <thead>
             <tr>
-                <th class="woocommerce-orders-table__header"><span class="nobr"><?php _e('Ticket ID', 'woo-support-system'); ?></span></th>
-                <th class="woocommerce-orders-table__header"><span class="nobr"><?php _e('Subject', 'woo-support-system'); ?></span></th>
-                <th class="woocommerce-orders-table__header"><span class="nobr"><?php _e('Status', 'woo-support-system'); ?></span></th>
-                <th class="woocommerce-orders-table__header"><span class="nobr"><?php _e('Last Updated', 'woo-support-system'); ?></span></th>
-                <th class="woocommerce-orders-table__header"></th>
+                <th><span class="nobr"><?php _e('Ticket ID', 'woo-support-system'); ?></span></th>
+                <th><span class="nobr"><?php _e('Subject', 'woo-support-system'); ?></span></th>
+                <th><span class="nobr"><?php _e('Status', 'woo-support-system'); ?></span></th>
+                <th><span class="nobr"><?php _e('Last Updated', 'woo-support-system'); ?></span></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <?php if ( ! empty($tickets) ) : ?>
                 <?php foreach ( $tickets as $ticket ) : ?>
-                    <tr class="woocommerce-orders-table__row order">
-                        <td class="woocommerce-orders-table__cell" data-title="<?php _e('Ticket ID', 'woo-support-system'); ?>">#<?php echo esc_html( $ticket->id ); ?></td>
-                        <td class="woocommerce-orders-table__cell" data-title="<?php _e('Subject', 'woo-support-system'); ?>"><?php echo esc_html( $ticket->subject ); ?></td>
-                        <td class="woocommerce-orders-table__cell" data-title="<?php _e('Status', 'woo-support-system'); ?>"><span class="wss-status-<?php echo esc_attr( strtolower( str_replace(' ', '-', $ticket->status) ) ); ?>"><?php echo esc_html( wss_get_status_name($ticket->status) ); ?></span></td>
-                        <td class="woocommerce-orders-table__cell" data-title="<?php _e('Last Updated', 'woo-support-system'); ?>"><time><?php echo esc_html( date_i18n( 'F j, Y, g:i a', strtotime( $ticket->last_updated ) ) ); ?></time></td>
-                        <td class="woocommerce-orders-table__cell">
-                            <a href="<?php echo esc_url( wc_get_account_endpoint_url('view-ticket') . $ticket->id ); ?>" class="woocommerce-button button view"><?php _e('View', 'woo-support-system'); ?></a>
-                        </td>
+                    <tr>
+                        <td data-title="<?php _e('Ticket ID', 'woo-support-system'); ?>">#<?php echo esc_html( $ticket->id ); ?></td>
+                        <td data-title="<?php _e('Subject', 'woo-support-system'); ?>"><?php echo esc_html( $ticket->subject ); ?></td>
+                        <td data-title="<?php _e('Status', 'woo-support-system'); ?>"><span class="wss-status-<?php echo esc_attr( strtolower( str_replace(' ', '-', $ticket->status) ) ); ?>"><?php echo esc_html( wss_get_status_name($ticket->status) ); ?></span></td>
+                        <td data-title="<?php _e('Last Updated', 'woo-support-system'); ?>"><time><?php echo esc_html( date_i18n( 'F j, Y, g:i a', strtotime( $ticket->last_updated ) ) ); ?></time></td>
+                        <td><a href="<?php echo esc_url( wc_get_account_endpoint_url('view-ticket') . $ticket->id ); ?>" class="woocommerce-button button view"><?php _e('View', 'woo-support-system'); ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -158,7 +148,6 @@ $tickets = $wpdb->get_results( $wpdb->prepare(
             'next_text'    => __('Next &raquo;', 'woo-support-system'),
             'type'         => 'list',
         );
-        
         echo '<nav class="woocommerce-pagination">';
         echo paginate_links($pagination_args);
         echo '</nav>';
@@ -167,6 +156,22 @@ $tickets = $wpdb->get_results( $wpdb->prepare(
 </div>
 
 <?php if ($allow_attachments): ?>
+<style>
+.wss-flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4%;
+}
+.wss-flex-row .form-row-half {
+  flex: 1 1 48%;
+}
+@media (max-width: 767px) {
+  .wss-flex-row .form-row-half {
+    flex: 1 1 100%;
+  }
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('wss-new-ticket-form');
@@ -187,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (files.length > maxFiles) {
                 errorContainer.textContent = `You can only upload a maximum of ${maxFiles} files.`;
-                this.value = ''; // Clear the invalid selection
+                this.value = '';
                 return;
             }
 
@@ -207,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     continue;
                 }
             }
+
             if (hasError) {
                 this.value = '';
             }
